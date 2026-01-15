@@ -1,5 +1,5 @@
 import React from 'react';
-
+import IconRenderer from '../IconRenderer';
 
 const BasicTheme = ({ config }) => {
     const { title, bgColor, pattern, author, icon, font, customIcon } = config;
@@ -18,20 +18,10 @@ const BasicTheme = ({ config }) => {
                     </div>
 
                     <div className=" flex mx-4  p-4 rounded-xl items-center bg-white">
-                        {
-                            customIcon ?
-                                <div className="w-12 h-12  ">
-                                    <img src={customIcon} alt="img" className="rounded-full bg-white p-1 border-white" />
-                                </div>
-                                :
-                                <div className="mr-auto ml-2 items-center justify-center flex">
-                                    <i className={`devicon-${icon.value}-plain  p-4 dev-icon text-5xl`}></i>
-                                </div>
-                        }
-
-
+                        <div className="mr-auto ml-2 items-center justify-center flex w-12 h-12">
+                            <IconRenderer icon={icon} customIcon={customIcon} />
+                        </div>
                         <h2 className="text-xl ml-auto mr-2 font-semibold">{author}</h2>
-
                     </div>
 
                 </div>

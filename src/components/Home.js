@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../assets/icons/logo.png'
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import cover1 from '../assets/images/cover1.webp'
 import cover2 from '../assets/images/cover2.webp'
 import cover3 from '../assets/images/cover3.webp'
@@ -15,8 +15,35 @@ import hashnodeLogo from '../assets/images/hashnode-logo.png'
 import devLogo from '../assets/images/dev-logo.png'
 
 import WallOfLove from './walloflove';
+import GitHubAuthButton from './GitHubAuthButton';
+import { useAuth } from '../contexts/AuthContext';
 const Home = () => {
+    const { user, loading, error } = useAuth();
 
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="text-center p-8">
+                    <h2 className="text-2xl font-bold text-red-600 mb-4">配置错误</h2>
+                    <p className="text-gray-600 mb-4">{error}</p>
+                    <p className="text-sm text-gray-500">请检查 .env.local 文件中的 Supabase 配置</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Redirect to editor if already logged in
+    if (user) {
+        return <Navigate to="/editor" replace />;
+    }
 
     return (
         <div className="">
@@ -39,9 +66,7 @@ const Home = () => {
                     <h1 className="md:w-7/12 md:mx-10 mx-6 my-10 text-center md:text-5xl text-4xl font-extrabold text-gray-700 font-Anek">
                         Creating cover images for your blogs is now super easy
                     </h1>
-                    <Link to="/editor" className="hover:translate-x-2 duration-300 bg-gray-700 hover:bg-gray-800 group rounded-full border-4 border-gray-100 px-6 md:px-8 text-white md:text-2xl text-base mx-auto font-Poppins font-semibold md:p-4 p-2">
-                        <span className="md:text-2xl font-semibold text-lg">Create Now</span>
-                    </Link>
+                    <GitHubAuthButton />
 
                 </div>
 
@@ -189,9 +214,7 @@ const Home = () => {
                     <div className="md:w-8/12 mx-auto pt-32 p-6">
                         <h2 className="md:text-6xl text-4xl text-center font-Anek font-bold  mx-auto">Simple, quick, and easy to use</h2>
                         <p className="md:text-2xl text-lg font-Inter text-gray-300 text-center py-4 md:w-8/12 mx-auto">So you can focus on writing your blog and never worry about those cover images.</p>
-                        <Link to="/editor" >
-                            <button className="flex mx-auto my-4 hover:translate-x-2 duration-300 bg-indigo-500 hover:bg-indigo-600  rounded-full  text-white md:text-xl text-base font-Nunito font-semibold p-4 px-8">It's Free! Try Now &rarr;</button>
-                        </Link>
+                        <GitHubAuthButton />
                     </div>
 
                     <footer className=" p-10 gap-2 flex md:flex-row flex-col-reverse font-Inter md:px-20 md:justify-between justify-center mx-auto md:w-10/12 w-full items-center">

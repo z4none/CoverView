@@ -1,62 +1,84 @@
+# CoverView
 
-
-## Coverview
 Creating cover images for your blogs is now super easy.
-<p>
-<a href="https://github.com/rutikwankhade/CoverView"><img src="https://img.shields.io/github/stars/rutikwankhade/CoverView.svg?style=social&label=Star"></a>
-<a href="https://github.com/rutikwankhade/CoverView"><img src="https://badges.frapsoft.com/os/v1/open-source.svg?v=103"></a>
-<a href="https://lbesson.mit-license.org"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
 
+## 📖 文档
 
+- **[使用指南](./docs/README.md)** - 项目介绍和功能说明
+- **[配置指南](./docs/SUPABASE_SETUP.md)** - Supabase 认证系统配置
 
-</p>
+## 🚀 快速开始
 
+### 1. 安装依赖
+```bash
+npm install
+```
 
+### 2. 配置环境变量
+```bash
+cp docs/.env.example .env.local
+# 编辑 .env.local 填入你的配置
+```
 
+### 3. 配置数据库
+按照 [配置指南](./docs/SUPABASE_SETUP.md) 设置 Supabase 项目和数据库。
 
-<img src="https://gist.github.com/user-attachments/assets/1d1c1833-29bc-45d6-97dd-e26c2d1019cb
-" height="auto" width="800px"  margin="20px">
-
-
-
- 
-
-
-## ⚡ Features
-- 🚀 super fast and easy to use
-- ✨ unsplash integration to search images
-- 🌈 7 different themes, multiple fonts
-- 🌠 100+ dev icons with option to upload custom icon
-- 💾 Cover size based on blogging platform (i.e hashnode and dev)
-
-## 👩‍💻 Developing
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-
-
-```shell
-git clone https://github.com/rutikwankhade/CoverView.git
-cd CoverView/
+### 4. 启动项目
+```bash
 npm start
 ```
 
+访问 `http://localhost:3000` 开始使用！
 
-## 👇 Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+## ⚡ 主要功能
 
+- 🚀 超快速度，简单易用
+- ✨ Unsplash 图片搜索集成
+- 🌈 7 种不同主题，多种字体选择
+- 🌠 100+ 开发图标，支持自定义上传
+- 💾 基于博客平台的封面尺寸（Hashnode、Dev）
+- 🔐 用户登录和使用量限制
+- 🤖 AI 功能（开发中）
 
-1. Fork it (<https://github.com/rutikwankhade/CoverView/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
+## 🛠️ 技术栈
 
+- **前端**: React 16 + TailwindCSS
+- **认证**: Supabase Auth + GitHub OAuth
+- **图片处理**: dom-to-image
+- **图标**: Unsplash API + Devicons
 
-## 🙏 Acknowledgments
-- [dom-to-image](https://github.com/tsayen/dom-to-image)
-- [Hero Patterns](https://www.heropatterns.com/)
-- [Devicons](https://github.com/devicons/devicon)
+## 📁 项目结构
 
-Don't forget to leave a ⭐ if you found this useful. Also checkout more products i built at [rutik.dev](https://rutik.dev)
+```
+src/
+├── components/          # React 组件
+│   ├── App.js          # 主应用和路由
+│   ├── Home.js         # 首页
+│   ├── Editor.js       # 编辑器
+│   ├── Themes/         # 主题组件
+│   └── ...
+├── contexts/           # React Context
+│   └── AuthContext.js  # 认证状态管理
+├── hooks/              # 自定义 Hooks
+│   └── useUsageTracker.js  # 使用量追踪
+├── utils/              # 工具函数
+└── assets/             # 静态资源
 
+docs/                   # 文档
+├── README.md           # 详细说明
+├── SUPABASE_SETUP.md   # 配置指南
+└── supabase/           # 数据库脚本
+    └── schema.sql
+```
 
+## 🤝 贡献
+
+欢迎提交 Pull Request！重要改动请先创建 Issue 讨论。
+
+## 📄 许可证
+
+MIT License - 详见 [LICENSE](./LICENSE) 文件。
+
+---
+
+⭐ 如果这个项目对你有帮助，请给个 Star！也欢迎查看我的其他作品：[rutik.dev](https://rutik.dev)

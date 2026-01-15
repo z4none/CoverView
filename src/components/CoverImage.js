@@ -30,10 +30,10 @@ const CoverImage = (props) => {
 			case 'basic': return <BasicTheme config={props} />
 			case 'modern': return <ModernTheme config={props} />
 			case 'outline': return <OutlineTheme config={props} />
-			case 'preview': return <PreviewTheme config={props} />
-			case 'stylish': return <StylishTheme config={props} />
-			case 'mobile': return <MobileMockupTheme config={props} />
-			case 'background': return <BackgroundTheme config={props} />
+			case 'preview': return <PreviewTheme config={props} onOpenAI={props.onOpenAI} onOpenUnsplash={props.onOpenUnsplash} onOpenUpload={props.onOpenUpload} />
+			case 'stylish': return <StylishTheme config={props} onOpenAI={props.onOpenAI} onOpenUnsplash={props.onOpenUnsplash} onOpenUpload={props.onOpenUpload} />
+			case 'mobile': return <MobileMockupTheme config={props} onOpenAI={props.onOpenAI} onOpenUnsplash={props.onOpenUnsplash} onOpenUpload={props.onOpenUpload} />
+			case 'background': return <BackgroundTheme config={props} onOpenAI={props.onOpenAI} onOpenUnsplash={props.onOpenUnsplash} onOpenUpload={props.onOpenUpload} />
 
 			default: return <BasicTheme config={props} />
 		}
@@ -41,7 +41,7 @@ const CoverImage = (props) => {
 
 
 	return (
-		<div className={`border-2  border-gray-50 md:scale-100 scale-50 ${props.platform}`}>
+		<div className={`md:scale-100 scale-50 ${props.platform}`}>
 			{selectTheme(theme)}
 		</div>
 	);
