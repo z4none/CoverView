@@ -30,7 +30,7 @@ const UnsplashSearch = ({ largeImgPreview, onImageSelected }) => {
     };
 
     // Mock data for when API key is missing or request fails
-    const mockImages = [
+    const mockImages = React.useMemo(() => [
         {
             id: 'mock1',
             urls: { regular: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80' },
@@ -64,7 +64,7 @@ const UnsplashSearch = ({ largeImgPreview, onImageSelected }) => {
             },
             links: { download_location: '' }
         }
-    ];
+    ], []);
 
 
     const searchImages = (query = searchText) => {
@@ -130,7 +130,7 @@ const UnsplashSearch = ({ largeImgPreview, onImageSelected }) => {
                 console.error('Error loading initial images:', error);
                 setImageList(mockImages);
             });
-    }, [])
+    }, [mockImages]);
 
     return (
         <div className='w-full h-full'>

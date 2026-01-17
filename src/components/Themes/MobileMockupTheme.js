@@ -3,7 +3,7 @@ import { ImgContext } from '../../utils/ImgContext';
 import IconRenderer from '../IconRenderer';
 
 const MobileMockupTheme = ({ config, onOpenAI, onOpenUnsplash, onOpenUpload }) => {
-    const { title, author, icon, font, customIcon, bgColor, iconColor, fontSize, textColor } = config;
+    const { title, icon, font, customIcon, bgColor, iconColor, fontSize, textColor } = config;
     const { unsplashImage, setUnsplashImage } = useContext(ImgContext);
 
     return (

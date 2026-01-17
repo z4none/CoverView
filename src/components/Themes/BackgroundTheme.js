@@ -3,7 +3,7 @@ import { ImgContext } from '../../utils/ImgContext';
 import IconRenderer from '../IconRenderer';
 
 const BackgroundTheme = ({ config, onOpenAI, onOpenUnsplash, onOpenUpload }) => {
-    const { title, bgColor, pattern, author, icon, font, customIcon, iconColor, fontSize, textColor } = config;
+    const { title, bgColor, author, icon, font, customIcon, iconColor, fontSize, textColor } = config;
     const { unsplashImage, setUnsplashImage } = useContext(ImgContext);
 
     return (

@@ -11,7 +11,7 @@ const AIImageGenerator = ({
   remainingQuota,
   onUseQuota
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('generate');
   const [prompt, setPrompt] = useState('');
   const [style, setStyle] = useState('realistic');

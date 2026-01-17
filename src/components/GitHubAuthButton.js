@@ -4,11 +4,11 @@ import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../supabaseClient'
 
 const GitHubAuthButton = () => {
-  const { loading } = useAuth()
+  const { loading } = useAuth();
   const { t } = useTranslation()
 
   const handleGitHubSignIn = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
         redirectTo: `${window.location.origin}/editor`

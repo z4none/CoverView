@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../supabaseClient';
 import Header from './Header';
@@ -13,25 +13,20 @@ const Profile = () => {
     const [hasMore, setHasMore] = useState(true);
     const PAGE_SIZE = 10;
 
-    useEffect(() => {
-        if (user) {
-            fetchCredits();
-            fetchTransactions();
-        }
-    }, [user, page]);
-
-    const fetchCredits = async () => {
-        const { data, error } = await supabase
+    const fetchCredits = useCallback(async () => {
+        if (!user) return;
+        const { data } = await supabase
             .from('user_usage')
             .select('credits')
             .eq('user_id', user.id)
             .single();
 
         if (data) setCredits(data.credits);
-    };
+    }, [user]);
 
-    const fetchTransactions = async () => {
-        const { data, error } = await supabase
+    const fetchTransactions = useCallback(async () => {
+        if (!user) return;
+        const { data } = await supabase
             .from('credit_transactions')
             .select('*')
             .eq('user_id', user.id)
@@ -43,7 +38,14 @@ const Profile = () => {
             setTransactions(prev => page === 0 ? data : [...prev, ...data]);
         }
         setIsLoading(false);
-    };
+    }, [user, page]);
+
+    useEffect(() => {
+        if (user) {
+            fetchCredits();
+            fetchTransactions();
+        }
+    }, [user, fetchCredits, fetchTransactions]);
 
     if (!user) return <div className="text-center mt-20">Please login first</div>;
 

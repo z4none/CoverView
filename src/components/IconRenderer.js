@@ -43,29 +43,6 @@ const IconRenderer = ({ icon, customIcon, iconColor, className = '' }) => {
     return null;
 };
 
-const getHueFromHex = (hex) => {
-    const cleanHex = hex.replace('#', '');
-    const r = parseInt(cleanHex.substr(0, 2), 16);
-    const g = parseInt(cleanHex.substr(2, 2), 16);
-    const b = parseInt(cleanHex.substr(4, 2), 16);
 
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    let h = 0;
-
-    if (max !== min) {
-        const d = max - min;
-
-        if (max === r) {
-            h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
-        } else if (max === g) {
-            h = ((b - r) / d + 2) / 6;
-        } else if (max === b) {
-            h = ((r - g) / d + 4) / 6;
-        }
-    }
-
-    return Math.round(h * 360);
-};
 
 export default IconRenderer;

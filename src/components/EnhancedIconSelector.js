@@ -166,7 +166,7 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
     };
 
     loadIcons();
-  }, []);
+  }, [t]);
 
   // Infer icon category from name
   const getIconCategory = (name) => {
