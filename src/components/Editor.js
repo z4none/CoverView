@@ -257,12 +257,14 @@ class Editor extends React.Component {
 
 		if (max !== min) {
 			const d = max - min;
-			const s = max === 0 ? 0 : d / (255 - Math.abs(max + min - 255));
+			// s is calculated but unused, commented out to fix lint error
+			// const s = max === 0 ? 0 : d / (255 - Math.abs(max + min - 255));
 
 			switch (max) {
 				case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
 				case g: h = ((b - r) / d + 2) / 6; break;
 				case b: h = ((r - g) / d + 4) / 6; break;
+				default: break;
 			}
 		}
 
@@ -285,6 +287,7 @@ class Editor extends React.Component {
 				case r: h = (g - b) / d + (g < b ? 6 : 0); break;
 				case g: h = (b - r) / d + 2; break;
 				case b: h = (r - g) / d + 4; break;
+				default: break;
 			}
 			h /= 6;
 		}
@@ -330,7 +333,8 @@ class Editor extends React.Component {
 			b = parseInt(cleanHex.substring(4, 6), 16);
 		}
 
-		const [h, s, l] = this.rgbToHsl(r, g, b);
+		// eslint-disable-next-line no-unused-vars
+		const [h, _s, l] = this.rgbToHsl(r, g, b);
 
 		// 文本需要更高的对比度，所以亮度阈值更极端
 		let newL;

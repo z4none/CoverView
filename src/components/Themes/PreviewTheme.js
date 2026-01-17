@@ -1,4 +1,3 @@
-```
 import React, { useContext } from 'react';
 import { ImgContext } from '../../utils/ImgContext';
 import IconRenderer from '../IconRenderer';
@@ -9,10 +8,10 @@ const PreviewTheme = ({ config, onOpenAI, onOpenUnsplash, onOpenUpload }) => {
 
     return (
         <div className="w-full h-full bg-white">
-            <div className={`overflow - y - hidden flex flex - col px - 4 pt - 4 w - full h - full`}
+            <div className={`overflow-y-hidden flex flex-col px-4 pt-4 w-full h-full`}
                 style={{ backgroundColor: bgColor }}
             >
-                <h1 className={`${ font } p - 10 font - bold text - center`} style={{ fontSize: `${ fontSize } px`, lineHeight: '1.2', color: textColor }}>{title}</h1>
+                <h1 className={`${font} p-10 font-bold text-center`} style={{ fontSize: `${fontSize}px`, lineHeight: '1.2', color: textColor }}>{title}</h1>
 
                 <div className="w-10/12 group mx-auto mt-auto mb-0 shadow-lg flex flex-col bg-white rounded-t-xl border-white">
                     <div className="bg-gray-800 h-8 w-full p-2 flex items-center rounded-t-xl">
