@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import aiService from '../services/aiService';
 import imageHistoryService from '../services/imageHistoryService';
 import { ImgContext } from '../utils/ImgContext';
@@ -10,10 +11,11 @@ const AIImageGenerator = ({
   remainingQuota,
   onUseQuota
 }) => {
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('generate');
   const [prompt, setPrompt] = useState('');
   const [style, setStyle] = useState('realistic');
-  const [model, setModel] = useState('flux');
+  // const [model, setModel] = useState('flux'); // Removed unused
   const [loading, setLoading] = useState(false);
   const [generatedImage, setGeneratedImage] = useState(null);
   const [error, setError] = useState(null);
@@ -22,15 +24,15 @@ const AIImageGenerator = ({
   const { setUnsplashImage } = useContext(ImgContext);
 
   const styles = aiService.getImageStyles();
-  const models = aiService.getPollinationsModels();
+  // const models = aiService.getPollinationsModels(); // Removed unused
 
-  React.useEffect(() => {
-    // 根据标题自动生成提示词
-    if (title) {
-      const autoPrompt = aiService.generateImagePrompt(title, style);
-      setPrompt(autoPrompt);
-    }
-  }, [title, style]);
+  // React.useEffect(() => {
+  //   // 根据标题自动生成提示词
+  //   if (title) {
+  //     const autoPrompt = aiService.generateImagePrompt(title, style);
+  //     setPrompt(autoPrompt);
+  //   }
+  // }, [title, style]);
 
   useEffect(() => {
     if (activeTab === 'history') {
@@ -38,15 +40,44 @@ const AIImageGenerator = ({
     }
   }, [activeTab]);
 
+  const handleUseImage = (image) => {
+    setUnsplashImage({
+      url: image.url || image.remoteUrl,
+      name: image.prompt || 'AI Generated Image',
+      avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=AI',
+      profile: '#'
+    });
+
+    if (onImageGenerated) {
+      onImageGenerated(image);
+    }
+
+    if (onClose) {
+      onClose();
+    }
+  };
+
+  const handleStyleChange = (newStyle) => {
+    setStyle(newStyle);
+  };
+
+  const handleDeleteImage = (e, id) => {
+    e.stopPropagation();
+    if (window.confirm(t('ai.actions.confirmDelete'))) {
+      const updatedHistory = imageHistoryService.deleteImage(id);
+      setHistory(updatedHistory);
+    }
+  };
+
   const handleGenerate = async () => {
     if (!prompt.trim()) {
-      setError('请输入图像描述');
+      setError(t('ai.errors.emptyPrompt'));
       return;
     }
 
-    // 检查配额
+    // Check quota
     if (remainingQuota !== undefined && remainingQuota <= 0) {
-      setError('AI 图片生成次数已用完，请升级到 Pro 版本');
+      setError(t('ai.errors.quotaExceeded'));
       return;
     }
 
@@ -54,17 +85,17 @@ const AIImageGenerator = ({
     setError(null);
 
     try {
-      const result = await aiService.generateImage(prompt, style);
+      const result = await aiService.generateImage({ title, prompt, style });
       setGeneratedImage(result);
 
-      // 保存到历史记录
+      // Save to history
       imageHistoryService.saveImage(result);
 
-      // 使用配额
+      // Use quota
       if (onUseQuota) {
         const success = await onUseQuota('imageGenerations');
         if (!success) {
-          setError('配额不足，请升级到 Pro 版本');
+          setError(t('ai.errors.insufficientQuota'));
           return;
         }
       }
@@ -75,49 +106,13 @@ const AIImageGenerator = ({
       setLoading(false);
     }
   };
-
-  const handleUseImage = (imgToUse = generatedImage) => {
-    if (!imgToUse) return;
-
-    // 构造兼容 Unsplash 格式的数据对象，以便 BackgroundTheme 可以正常显示
-    // 优先使用 remoteUrl，以防 blob url 失效
-    const imgUrl = imgToUse.remoteUrl || imgToUse.url;
-
-    const aiImageObj = {
-      url: imgUrl,
-      name: `AI generated (${imgToUse.model || 'zimage'})`,
-      avatar: 'https://cdn-icons-png.flaticon.com/512/4712/4712027.png', // AI avatar placeholder
-      profile: 'https://pollinations.ai',
-      downloadLink: imgUrl,
-      alt_description: imgToUse.prompt
-    };
-
-    setUnsplashImage(aiImageObj);
-
-    // 调用父组件回调以关闭弹窗
-    if (onImageGenerated) {
-      onImageGenerated(imgToUse);
-    }
-  };
-
-  const handleStyleChange = (newStyle) => {
-    setStyle(newStyle);
-    // 重新生成提示词
-    if (title) {
-      const autoPrompt = aiService.generateImagePrompt(title, newStyle);
-      setPrompt(autoPrompt);
-    }
-  };
-
-  const handleModelChange = (newModel) => {
-    setModel(newModel);
-  };
-
+  //...
+  //...
   const renderGenerateTab = () => (
     <>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          选择风格
+          {t('ai.style.label')}
         </label>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {styles.map((styleOption) => (
@@ -129,28 +124,28 @@ const AIImageGenerator = ({
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
             >
-              {styleOption.name}
+              {t(`ai.style.options.${styleOption.id}`)}
             </button>
           ))}
         </div>
         <p className="text-xs text-gray-500 mt-1">
-          {styles.find(s => s.id === style)?.description}
+          {t(`ai.style.descriptions.${style}`)}
         </p>
       </div>
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          图像描述
+          {t('ai.prompt.label')}
         </label>
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder="描述你想要生成的图像..."
+          placeholder={t('ai.prompt.placeholder')}
           className="w-full border border-gray-300 rounded-lg p-3 text-sm resize-none"
           rows={3}
         />
         <p className="text-xs text-gray-500 mt-1">
-          💡 基于你的标题自动生成，可以手动修改
+          {t('ai.prompt.hint')}
         </p>
       </div>
 
@@ -170,10 +165,10 @@ const AIImageGenerator = ({
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            生成中...
+            {t('ai.actions.generating')}
           </span>
         ) : (
-          '🚀 生成图片'
+          t('ai.actions.generateWithCost')
         )}
       </button>
 
@@ -185,7 +180,7 @@ const AIImageGenerator = ({
 
       {generatedImage && (
         <div className="mt-6">
-          <h4 className="text-sm font-medium text-gray-700 mb-3">生成结果</h4>
+          <h4 className="text-sm font-medium text-gray-700 mb-3">{t('ai.result.title')}</h4>
           <div className="relative">
             <img
               src={generatedImage.url}
@@ -203,19 +198,19 @@ const AIImageGenerator = ({
               onClick={() => handleUseImage(generatedImage)}
               className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm font-medium"
             >
-              ✓ 使用此图片
+              {t('ai.actions.useThis')}
             </button>
             <button
               onClick={handleGenerate}
               className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg text-sm font-medium"
             >
-              🔄 重新生成
+              {t('ai.actions.regenerateWithCost')}
             </button>
           </div>
 
           <div className="mt-3 p-3 bg-gray-50 rounded-lg text-xs text-gray-600">
-            <p><strong>提示词:</strong> {generatedImage.prompt}</p>
-            <p className="truncate"><strong>URL:</strong> {generatedImage.remoteUrl || generatedImage.url}</p>
+            <p><strong>{t('ai.result.prompt')}</strong> {generatedImage.prompt}</p>
+            <p className="truncate"><strong>{t('ai.result.url')}</strong> {generatedImage.remoteUrl || generatedImage.url}</p>
           </div>
         </div>
       )}
@@ -229,7 +224,7 @@ const AIImageGenerator = ({
           <svg className="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          <p className="text-sm">暂无生成历史</p>
+          <p className="text-sm">{t('ai.history.empty')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-3">
@@ -247,7 +242,16 @@ const AIImageGenerator = ({
                     onClick={() => handleUseImage(item)}
                     className="bg-white text-gray-900 px-3 py-1 rounded-full text-xs font-semibold shadow-lg transform hover:scale-105 transition-all"
                   >
-                    使用
+                    {t('ai.actions.use')}
+                  </button>
+                  <button
+                    onClick={(e) => handleDeleteImage(e, item.id)}
+                    className="absolute top-2 right-2 p-1.5 bg-red-500/80 hover:bg-red-600 text-white rounded-full transition-colors shadow-sm"
+                    title={t('ai.actions.delete')}
+                  >
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -255,7 +259,7 @@ const AIImageGenerator = ({
                 <p className="line-clamp-2 mb-1" title={item.prompt}>{item.prompt}</p>
                 <div className="flex justify-between items-center text-gray-400 text-[10px]">
                   <span>{new Date(item.timestamp).toLocaleDateString()}</span>
-                  <span>{item.style}</span>
+                  <span>{t(`ai.style.options.${item.style}`) || item.style}</span>
                 </div>
               </div>
             </div>
@@ -266,10 +270,10 @@ const AIImageGenerator = ({
   );
 
   return (
-    <div className="ai-image-generator bg-white rounded-lg shadow-lg p-6 mt-4">
+    <div className="ai-image-generator bg-white rounded-lg shadow-lg p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-800">
-          🎨 AI 图片生成
+          {t('ai.title')}
         </h3>
         <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -285,7 +289,7 @@ const AIImageGenerator = ({
             }`}
           onClick={() => setActiveTab('generate')}
         >
-          生成图片
+          {t('ai.tabs.generate')}
           {activeTab === 'generate' && (
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-t-full"></span>
           )}
@@ -295,7 +299,7 @@ const AIImageGenerator = ({
             }`}
           onClick={() => setActiveTab('history')}
         >
-          历史记录
+          {t('ai.tabs.history')}
           {activeTab === 'history' && (
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-t-full"></span>
           )}

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useMemo, useRef, useLayoutEffect } from 'react';
 import { FixedSizeGrid as Grid } from 'react-window';
+import { useTranslation } from 'react-i18next';
+import { simpleIconsMapping } from '../utils/simpleIconsMapping';
 
-// 简单的 AutoSizer 实现，避免库兼容性问题
+// Simple AutoSizer implementation to avoid library compatibility issues
 const MyAutoSizer = ({ children }) => {
   const ref = useRef(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
@@ -33,18 +35,17 @@ const MyAutoSizer = ({ children }) => {
 };
 
 // Cache key for SimpleIcons
-
 const CACHE_KEY = 'simpleicons_cache_v2';
-const CACHE_EXPIRY_HOURS = 24; // 缓存24小时
+const CACHE_EXPIRY_HOURS = 24; // Cache for 24 hours
 
 const EnhancedIconSelector = ({ value, onChange, onClose }) => {
+  const { t } = useTranslation();
   const [icons, setIcons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [debugInfo, setDebugInfo] = useState(null);
-  const [showDebug, setShowDebug] = useState(false);
 
-  // 检查缓存是否过期
+
+  // Check if cache is valid
   const isCacheValid = (cacheData) => {
     if (!cacheData || !cacheData.timestamp) return false;
     const cacheTime = new Date(cacheData.timestamp);
@@ -54,30 +55,25 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
   };
 
   useEffect(() => {
-    // 加载 SimpleIcons 图标
+    // Load SimpleIcons
     const loadIcons = async () => {
       try {
         setLoading(true);
 
-        // 尝试从缓存加载
+        // Try loading from cache
         const cachedData = localStorage.getItem(CACHE_KEY);
         if (cachedData) {
           const parsedCache = JSON.parse(cachedData);
           if (isCacheValid(parsedCache)) {
-            console.log('✅ 从缓存加载 SimpleIcons:', parsedCache.icons.length, '个图标');
-            console.log('📅 缓存时间:', new Date(parsedCache.timestamp).toLocaleString());
+            console.log('✅ Loaded SimpleIcons from cache:', parsedCache.icons.length, 'icons');
+            console.log('📅 Cache time:', new Date(parsedCache.timestamp).toLocaleString());
 
             const allIcons = [
-              { value: 'upload-your-own', label: 'Upload Your Own', source: 'custom', library: 'Custom', category: 'custom' },
+              { value: 'upload-your-own', label: t('iconSelector.uploadOwn'), source: 'custom', library: 'Custom', category: 'custom' },
               ...parsedCache.icons
             ];
 
-            setDebugInfo({
-              simpleIconsCount: parsedCache.icons.length,
-              totalCount: allIcons.length,
-              simpleIconsFormat: 'from cache',
-              loadTime: new Date(parsedCache.timestamp).toLocaleTimeString()
-            });
+
 
             setIcons(allIcons);
             setLoading(false);
@@ -85,80 +81,85 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
           }
         }
 
-        // 缓存无效或不存在，从网络加载
-        console.log('🔄 从网络加载 SimpleIcons...');
+        // Cache invalid or not found, load from network
+        console.log('🔄 Loading SimpleIcons from network...');
 
         const simpleIconsResponse = await fetch(
           'https://raw.githubusercontent.com/simple-icons/simple-icons/refs/heads/develop/data/simple-icons.json'
         );
         const simpleIconsData = await simpleIconsResponse.json();
 
-        console.log('📊 SimpleIcons 数据结构:', Object.keys(simpleIconsData));
-        console.log('📊 SimpleIcons.icons 是否存在:', !!simpleIconsData.icons);
-        console.log('📊 SimpleIcons.icons 长度:', simpleIconsData.icons?.length || 0);
+        console.log('📊 SimpleIcons structure:', Object.keys(simpleIconsData));
+        console.log('📊 SimpleIcons.icons exists:', !!simpleIconsData.icons);
+        console.log('📊 SimpleIcons.icons length:', simpleIconsData.icons?.length || 0);
 
-        // 处理 SimpleIcons
+        // Process SimpleIcons
         let simpleIcons = [];
 
         if (simpleIconsData.icons && Array.isArray(simpleIconsData.icons)) {
-          console.log('🎨 SimpleIcons 格式: data.icons 数组');
+          console.log('🎨 SimpleIcons format: data.icons array');
           simpleIcons = simpleIconsData.icons
             .filter(icon => icon.title)
-            .map(icon => ({
-              value: icon.title.toLowerCase().replace(/\s+/g, '-'),
-              label: icon.title,
-              source: 'simpleicons',
-              library: 'Simple Icons',
-              hex: icon.hex || '#666666',
-              slug: icon.slug,
-              category: getIconCategory(icon.title)
-            }));
+            .map(icon => {
+              // Try to find slug in our hardcoded mapping first
+              const mappedSlug = simpleIconsMapping[icon.title];
+              const apiSlug = (icon.slug === icon.title.toLowerCase().replace(/[^a-z0-9]/g, '') && icon.title.includes(' ')) ? icon.title.toLowerCase().replace(/\s+/g, '-') : icon.slug;
+
+              return {
+                value: icon.title.toLowerCase().replace(/\s+/g, '-'),
+                label: icon.title,
+                source: 'simpleicons',
+                library: 'Simple Icons',
+                hex: icon.hex || '#666666',
+                slug: mappedSlug || apiSlug, // Use mapped slug if available, otherwise API slug
+                category: getIconCategory(icon.title)
+              };
+            });
         } else if (Array.isArray(simpleIconsData)) {
-          console.log('🎨 SimpleIcons 格式: 直接数组');
+          console.log('🎨 SimpleIcons format: direct array');
           simpleIcons = simpleIconsData
             .filter(item => item.title)
-            .map(icon => ({
-              value: icon.title.toLowerCase().replace(/\s+/g, '-'),
-              label: icon.title,
-              source: 'simpleicons',
-              library: 'Simple Icons',
-              hex: icon.hex || '#666666',
-              slug: icon.slug,
-              category: getIconCategory(icon.title)
-            }));
+            .map(icon => {
+              // Try to find slug in our hardcoded mapping first
+              const mappedSlug = simpleIconsMapping[icon.title];
+
+              return {
+                value: icon.title.toLowerCase().replace(/\s+/g, '-'),
+                label: icon.title,
+                source: 'simpleicons',
+                library: 'Simple Icons',
+                hex: icon.hex || '#666666',
+                slug: mappedSlug || icon.slug, // Use mapped slug if available
+                category: getIconCategory(icon.title)
+              };
+            });
         } else {
-          console.error('❌ SimpleIcons 数据格式无法识别:', simpleIconsData);
+          console.error('❌ SimpleIcons format unrecognized:', simpleIconsData);
         }
 
-        console.log('✅ SimpleIcons 加载完成:', simpleIcons.length, '个图标');
+        console.log('✅ SimpleIcons loaded:', simpleIcons.length, 'icons');
 
-        // 合并并添加自定义上传选项
+        // Merge and add custom upload option
         const allIcons = [
-          { value: 'upload-your-own', label: 'Upload Your Own', source: 'custom', library: 'Custom', category: 'custom' },
+          { value: 'upload-your-own', label: t('iconSelector.uploadOwn'), source: 'custom', library: 'Custom', category: 'custom' },
           ...simpleIcons
         ];
 
-        console.log('🎉 所有图标加载完成:', allIcons.length, '个图标');
+        console.log('🎉 All icons loaded:', allIcons.length, 'icons');
 
-        // 保存到缓存
+        // Save to cache
         const cacheData = {
           icons: simpleIcons,
           timestamp: new Date().toISOString()
         };
         localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
-        console.log('💾 已缓存 SimpleIcons 数据');
+        console.log('💾 SimpleIcons data cached');
 
-        // 设置调试信息
-        setDebugInfo({
-          simpleIconsCount: simpleIcons.length,
-          totalCount: allIcons.length,
-          simpleIconsFormat: simpleIconsData.icons ? 'data.icons array' : Array.isArray(simpleIconsData) ? 'direct array' : 'unknown',
-          loadTime: new Date().toLocaleTimeString()
-        });
+
 
         setIcons(allIcons);
       } catch (error) {
-        console.error('❌ 加载图标时出错:', error);
+        console.error('❌ Error loading icons:', error);
       } finally {
         setLoading(false);
       }
@@ -167,7 +168,7 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
     loadIcons();
   }, []);
 
-  // 根据名称推断图标分类
+  // Infer icon category from name
   const getIconCategory = (name) => {
     const lowerName = name.toLowerCase();
 
@@ -190,7 +191,7 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
     return 'other';
   };
 
-  // 过滤图标
+  // Filter icons
   const filteredIcons = useMemo(() => {
     return icons.filter(icon => {
       if (!searchTerm) return true;
@@ -200,7 +201,7 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
     });
   }, [icons, searchTerm]);
 
-  // 渲染单个图标
+  // Render single icon
   const renderIcon = (icon) => {
     if (icon.source === 'simpleicons') {
       const iconSlug = icon.slug || icon.value;
@@ -231,7 +232,7 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
         <div className="bg-white rounded-lg p-6 max-w-md w-full">
           <div className="flex items-center justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <span className="ml-3">加载图标中...</span>
+            <span className="ml-3">{t('iconSelector.loading')}</span>
           </div>
         </div>
       </div>
@@ -241,10 +242,10 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg max-w-4xl w-full h-[80vh] flex flex-col">
-        {/* 头部 */}
+        {/* Header */}
         <div className="p-6 border-b">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold">选择图标</h2>
+            <h2 className="text-xl font-semibold">{t('iconSelector.title')}</h2>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600"
@@ -255,90 +256,23 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
             </button>
           </div>
 
-          {/* 搜索框 */}
+          {/* Search box */}
           <input
             type="text"
-            placeholder="搜索图标..."
+            placeholder={t('iconSelector.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
-          <div className="flex gap-4 mt-4 mb-2">
-            <button
-              onClick={() => setShowDebug(!showDebug)}
-              className="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-sm rounded-lg transition-colors"
-              title="显示调试信息"
-            >
-              🐛 调试
-            </button>
-            <button
-              onClick={() => {
-                localStorage.removeItem(CACHE_KEY);
-                console.log('🗑️ 已清除缓存');
-                window.location.reload();
-              }}
-              className="px-3 py-1 bg-red-100 hover:bg-red-200 text-sm rounded-lg transition-colors"
-              title="清除缓存"
-            >
-              🗑️ 清除缓存
-            </button>
-          </div>
 
-          {/* 调试面板 */}
-          {showDebug && debugInfo && (
-            <div className="mb-4 p-4 bg-gray-900 text-white rounded-lg">
-              <h4 className="font-medium mb-3 flex items-center justify-between">
-                <span>🐛 调试信息</span>
-                <button
-                  onClick={() => setShowDebug(false)}
-                  className="text-gray-400 hover:text-white"
-                >
-                  ✕
-                </button>
-              </h4>
-
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Simple Icons:</span>
-                  <span className="text-blue-400 font-mono">{debugInfo.simpleIconsCount} 个</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">总图标:</span>
-                  <span className="text-yellow-400 font-mono">{debugInfo.totalCount} 个</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">数据来源:</span>
-                  <span className={`font-mono ${debugInfo.simpleIconsFormat === 'from cache' ? 'text-green-400' : 'text-purple-400'}`}>
-                    {debugInfo.simpleIconsFormat === 'from cache' ? '📅 缓存' : '🌐 网络'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">数据格式:</span>
-                  <span className="text-purple-400 font-mono">data.icons array</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">加载时间:</span>
-                  <span className="text-gray-300 font-mono">{debugInfo.loadTime}</span>
-                </div>
-              </div>
-
-              {debugInfo.simpleIconsCount === 0 && (
-                <div className="mt-4 p-3 bg-red-900 rounded text-sm">
-                  <p className="text-red-400 font-medium mb-1">⚠️ SimpleIcons 加载失败</p>
-                  <p className="text-red-300 text-xs">请检查浏览器控制台的错误信息</p>
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
-        {/* 图标列表 - 虚拟滚动优化 */}
+        {/* Icon List - Virtualized */}
         <div className="flex-1 w-full h-full overflow-hidden relative" key={searchTerm}>
           <MyAutoSizer>
             {({ height, width }) => {
-              console.log('AutoSizer dim:', width, height);
-              // 移除 padding 后的可用尺寸 (p-6 = 24px)
+              // Remove padding (p-6 = 24px)
               const PADDING = 24;
 
               const safeWidth = width || 0;
@@ -346,16 +280,16 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
 
               const availableWidth = Math.max(0, safeWidth - (PADDING * 2));
 
-              const CELL_WIDTH = 100; // 预估每个单元格宽度
-              const CELL_HEIGHT = 100; // 预估每个单元格高度
-              const GAP = 16; // 间距
+              const CELL_WIDTH = 100; // Estimated cell width
+              const CELL_HEIGHT = 100; // Estimated cell height
+              const GAP = 16; // Gap
 
               const columnCount = Math.floor((availableWidth + GAP) / (CELL_WIDTH + GAP));
-              // 防止 columnCount 为 0
+              // Prevent columnCount from being 0
               const safeColumnCount = columnCount > 0 ? columnCount : 1;
               const rowCount = Math.ceil(filteredIcons.length / safeColumnCount);
 
-              // 实际单元格宽度（自适应填满宽）
+              // Actual cell width (autosize)
               const actualCellWidth = (availableWidth - (safeColumnCount - 1) * GAP) / safeColumnCount;
 
               const Cell = ({ columnIndex, rowIndex, style }) => {
@@ -364,7 +298,7 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
 
                 const icon = filteredIcons[index];
 
-                // 调整 style 的 top 和 left 以包含 padding
+                // Adjust style top and left to include padding
                 const itemStyle = {
                   ...style,
                   left: parseFloat(style.left) + PADDING,
@@ -409,17 +343,15 @@ const EnhancedIconSelector = ({ value, onChange, onClose }) => {
           </MyAutoSizer>
         </div>
 
-        {/* 底部 */}
+        {/* Footer */}
         <div className="p-4 border-t bg-gray-50">
           <div className="flex justify-between items-center text-sm text-gray-600">
             <div className="flex gap-2">
-              <span className="font-medium">当前显示: {filteredIcons.length}</span>
+              <span className="font-medium">{t('iconSelector.showing')}: {filteredIcons.length}</span>
               <span className="text-gray-400">/</span>
-              <span>总数: {icons.length}</span>
+              <span>{t('iconSelector.total')}: {icons.length}</span>
             </div>
-            <div className="flex gap-4">
-              <span>📊 Simple Icons: {debugInfo?.simpleIconsCount || 0}</span>
-            </div>
+
           </div>
         </div>
       </div>

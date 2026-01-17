@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import unsplash from '../utils/unsplashConfig';
 import { ImgContext } from '../utils/ImgContext';
 
 const UnsplashSearch = ({ largeImgPreview, onImageSelected }) => {
-
+    const { t } = useTranslation();
     const [imageList, setImageList] = useState([]);
     const [searchText, setSearchText] = useState('setup');
     const [provider, setProvider] = useState('unsplash');
@@ -146,7 +147,7 @@ const UnsplashSearch = ({ largeImgPreview, onImageSelected }) => {
                         onClick={() => setProvider('licyuan')}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${provider === 'licyuan' ? 'bg-pink-500 text-white' : 'bg-pink-50 text-pink-600 hover:bg-pink-100'}`}
                     >
-                        栗次元 (二次元)
+                        Licyuan (Anime)
                     </button>
                 </div>
 
@@ -155,7 +156,7 @@ const UnsplashSearch = ({ largeImgPreview, onImageSelected }) => {
                         <form onSubmit={(e) => handleSearchSubmit(e)} className=" mx-auto w-full flex bg-gray-50 rounded-full border border-gray-50 mb-2">
                             <input type="text"
                                 value={searchText}
-                                placeholder="Search photos"
+                                placeholder={t('unsplash.searchPlaceholder')}
                                 className="focus:outline-none w-full text-lg bg-gray-50  p-1 px-4  rounded-full  "
                                 onChange={(e) => setSearchText(e.target.value)}
                             />
@@ -168,15 +169,15 @@ const UnsplashSearch = ({ largeImgPreview, onImageSelected }) => {
                 ) : (
                     <div className="flex flex-col items-center justify-center w-full px-6 py-8">
                         <div className="text-center mb-6">
-                            <h3 className="text-lg font-bold text-gray-800 mb-2">随机二次元图片</h3>
-                            <p className="text-gray-500 text-sm">来自 栗次元 API (t.alcy.cc)</p>
+                            <h3 className="text-lg font-bold text-gray-800 mb-2">{t('unsplash.animeTitle')}</h3>
+                            <p className="text-gray-500 text-sm">{t('unsplash.animeSubtitle')}</p>
                         </div>
                         <button
                             onClick={() => getRandomAnimeImage()}
                             className="flex items-center gap-2 px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-full font-medium transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                            获取随机图片
+                            {t('unsplash.getRandom')}
                         </button>
                     </div>
                 )}
@@ -190,7 +191,7 @@ const UnsplashSearch = ({ largeImgPreview, onImageSelected }) => {
                                     className={`rounded-lg relative cursor-pointer m-3 ${largeImgPreview ? ' h-44 w-60' : 'h-24 w-40'
                                         }`}
                                 >
-                                    <span className="font-Inter top-2 left-2 absolute text-sm font-semibold text-white opacity-50 ">Click to Select</span>
+                                    <span className="font-Inter top-2 left-2 absolute text-sm font-semibold text-white opacity-50 ">{t('unsplash.clickToSelect')}</span>
                                     <img src={image.urls.regular}
                                         alt={image.alt_description}
                                         onClick={() => selectImage(image)

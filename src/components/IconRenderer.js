@@ -1,6 +1,6 @@
 import React from 'react';
 
-const IconRenderer = ({ icon, customIcon, className = '' }) => {
+const IconRenderer = ({ icon, customIcon, iconColor, className = '' }) => {
     if (customIcon) {
         return (
             <div className={className}>
@@ -15,10 +15,11 @@ const IconRenderer = ({ icon, customIcon, className = '' }) => {
 
     if (icon.source === 'simpleicons') {
         const iconSlug = icon.slug || icon.value;
+        const colorParam = (iconColor && iconColor !== '') ? `/${iconColor.replace('#', '')}` : '';
         return (
             <div className={className}>
                 <img
-                    src={`https://cdn.simpleicons.org/${iconSlug}`}
+                    src={`https://cdn.simpleicons.org/${iconSlug}${colorParam}`}
                     alt={icon.label}
                     className="w-full h-full"
                     width="50"
@@ -37,13 +38,7 @@ const IconRenderer = ({ icon, customIcon, className = '' }) => {
         );
     }
 
-    if (icon.source === 'devicon' || !icon.source) {
-        return (
-            <div className={className}>
-                <i className={`devicon-${icon.value}-plain dev-icon ${className}`}></i>
-            </div>
-        );
-    }
+
 
     return null;
 };

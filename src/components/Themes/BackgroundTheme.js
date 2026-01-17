@@ -3,7 +3,7 @@ import { ImgContext } from '../../utils/ImgContext';
 import IconRenderer from '../IconRenderer';
 
 const BackgroundTheme = ({ config, onOpenAI, onOpenUnsplash, onOpenUpload }) => {
-    const { title, author, font, icon, customIcon, bgColor } = config;
+    const { title, bgColor, pattern, author, icon, font, customIcon, iconColor, fontSize, textColor } = config;
     const { unsplashImage, setUnsplashImage } = useContext(ImgContext);
 
     return (
@@ -35,12 +35,12 @@ const BackgroundTheme = ({ config, onOpenAI, onOpenUnsplash, onOpenUpload }) => 
                                     </button>
 
                                     <div className={`${font} px-10 pt-32  text-left rounded-xl h-full p-4 flex flex-col`}>
-                                        <h1 className=" md:text-5xl text-center text-2xl font-bold text-white">{title}</h1>
+                                        <h1 className=" text-center font-bold" style={{ fontSize: `${fontSize}px`, lineHeight: '1.2', color: textColor }}>{title}</h1>
                                         <div className="flex flex-col items-center py-10  ">
 
-                                            <h2 className="text-xl mb-2 font-semibold text-left text-white ">{author}</h2>
+                                            <h2 className="text-xl mb-2 font-semibold text-left" style={{ color: textColor }}>{author}</h2>
                                             <div className="items-center justify-center flex w-12 h-12">
-                                                <IconRenderer icon={icon} customIcon={customIcon} />
+                                                <IconRenderer icon={icon} customIcon={customIcon} iconColor={iconColor} />
                                             </div>
 
                                         </div>
@@ -64,8 +64,8 @@ const BackgroundTheme = ({ config, onOpenAI, onOpenUnsplash, onOpenUpload }) => 
                             :
                             <div className="flex flex-col p-12 bg-gray-50 items-center justify-center gap-6 min-h-[400px] border-2 border-dashed border-gray-300 rounded-lg m-4">
                                 <div className="text-center mb-2">
-                                    <h3 className="text-xl font-semibold text-gray-700 mb-2">选择背景图片</h3>
-                                    <p className="text-gray-500">搜索 Unsplash 图库或使用 AI 生成独特背景</p>
+                                    <h3 className="text-xl font-semibold text-gray-700 mb-2">Select Background Image</h3>
+                                    <p className="text-gray-500">Search Unsplash or use AI generation</p>
                                 </div>
                                 <div className="flex gap-4">
                                     <button

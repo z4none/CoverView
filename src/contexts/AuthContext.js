@@ -10,9 +10,9 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    // 检查 supabase 是否可用
+    // Check if supabase is available
     if (!supabase) {
-      setError('Supabase 配置错误，请检查环境变量')
+      setError('Supabase configuration error, please check environment variables')
       setLoading(false)
       return
     }

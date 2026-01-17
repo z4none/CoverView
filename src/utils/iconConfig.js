@@ -1,30 +1,30 @@
 // src/utils/iconConfig.js
 
-// 图标库配置
+// Icon Library Configuration
 export const ICON_LIBRARIES = {
   DEVICONS: {
     name: 'Devicons',
-    description: '编程语言和开发工具图标',
+    description: 'Programming languages and dev tools icons',
     url: 'https://raw.githubusercontent.com/devicons/devicon/master/devicon.json',
     source: 'devicon',
     totalIcons: '~200'
   },
   SIMPLEICONS: {
     name: 'Simple Icons',
-    description: '品牌和技术栈图标',
+    description: 'Brand and tech stack icons',
     url: 'https://raw.githubusercontent.com/simple-icons/simple-icons/refs/heads/develop/data/simple-icons.json',
     source: 'simpleicons',
     totalIcons: '~3000'
   }
 };
 
-// 图标库名称映射
+// Icon Library Name Mapping
 export const ICON_LIBRARY_NAMES = {
   devicon: 'Devicons',
   simpleicons: 'Simple Icons'
 };
 
-// 图标显示配置
+// Icon Display Configuration
 export const ICON_DISPLAY_CONFIG = {
   simpleicons: {
     baseUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/',
@@ -37,36 +37,36 @@ export const ICON_DISPLAY_CONFIG = {
   }
 };
 
-// 热门图标（用于快速选择）
+// Popular Icons (for quick selection)
 export const POPULAR_ICONS = [
-  // 编程语言
+  // Languages
   { name: 'javascript', library: 'devicon', category: 'language' },
   { name: 'python', library: 'devicon', category: 'language' },
   { name: 'typescript', library: 'devicon', category: 'language' },
   { name: 'java', library: 'devicon', category: 'language' },
   { name: 'go', library: 'devicon', category: 'language' },
   { name: 'rust', library: 'devicon', category: 'language' },
-  
-  // 框架和库
+
+  // Frameworks and Libraries
   { name: 'react', library: 'devicon', category: 'framework' },
   { name: 'vue', library: 'devicon', category: 'framework' },
   { name: 'angular', library: 'devicon', category: 'framework' },
   { name: 'nextjs', library: 'simpleicons', category: 'framework' },
   { name: 'nuxtjs', library: 'simpleicons', category: 'framework' },
-  
-  // 数据库
+
+  // Databases
   { name: 'mongodb', library: 'devicon', category: 'database' },
   { name: 'postgresql', library: 'devicon', category: 'database' },
   { name: 'mysql', library: 'devicon', category: 'database' },
-  
-  // 云服务
+
+  // Cloud Services
   { name: 'aws', library: 'simpleicons', category: 'cloud' },
   { name: 'google-cloud', library: 'simpleicons', category: 'cloud' },
   { name: 'azure', library: 'simpleicons', category: 'cloud' },
   { name: 'vercel', library: 'simpleicons', category: 'cloud' },
   { name: 'netlify', library: 'simpleicons', category: 'cloud' },
-  
-  // 开发工具
+
+  // Dev Tools
   { name: 'git', library: 'devicon', category: 'tool' },
   { name: 'docker', library: 'devicon', category: 'tool' },
   { name: 'kubernetes', library: 'devicon', category: 'tool' },
@@ -74,49 +74,49 @@ export const POPULAR_ICONS = [
   { name: 'github', library: 'simpleicons', category: 'tool' }
 ];
 
-// 图标分类
+// Icon Categories
 export const ICON_CATEGORIES = {
-  language: { name: '编程语言', color: '#3178c6' },
-  framework: { name: '框架/库', color: '#61dafb' },
-  database: { name: '数据库', color: '#4caf50' },
-  cloud: { name: '云服务', color: '#ff9800' },
-  tool: { name: '开发工具', color: '#9c27b0' },
-  social: { name: '社交媒体', color: '#e91e63' },
-  os: { name: '操作系统', color: '#795548' }
+  language: { name: 'Languages', color: '#3178c6' },
+  framework: { name: 'Frameworks', color: '#61dafb' },
+  database: { name: 'Databases', color: '#4caf50' },
+  cloud: { name: 'Cloud', color: '#ff9800' },
+  tool: { name: 'Dev Tools', color: '#9c27b0' },
+  social: { name: 'Social Media', color: '#e91e63' },
+  os: { name: 'OS', color: '#795548' }
 };
 
-// 图标搜索功能
+// Icon Search Function
 export const searchIcons = (icons, searchTerm) => {
   if (!searchTerm) return icons;
-  
+
   const lowerSearchTerm = searchTerm.toLowerCase();
-  return icons.filter(icon => 
+  return icons.filter(icon =>
     icon.label.toLowerCase().includes(lowerSearchTerm) ||
     (icon.hex && icon.hex.toLowerCase().includes(lowerSearchTerm)) ||
     (icon.slug && icon.slug.toLowerCase().includes(lowerSearchTerm))
   );
 };
 
-// 图标统计
+// Icon Statistics
 export const getIconStats = (icons) => {
   const stats = {
     total: icons.length,
     byLibrary: {},
     byCategory: {}
   };
-  
+
   icons.forEach(icon => {
-    // 按库统计
+    // Stats by Library
     if (icon.source) {
       stats.byLibrary[icon.source] = (stats.byLibrary[icon.source] || 0) + 1;
     }
-    
-    // 按分类统计
+
+    // Stats by Category
     const popularIcon = POPULAR_ICONS.find(pop => pop.name === icon.value);
     if (popularIcon) {
       stats.byCategory[popularIcon.category] = (stats.byCategory[popularIcon.category] || 0) + 1;
     }
   });
-  
+
   return stats;
 };

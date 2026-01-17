@@ -1,81 +1,55 @@
-# CoverView - Supabase 配置指南
+# Supabase Setup Guide
 
-## 1. 创建 Supabase 项目
+## 1. Project Initialization
+1. Create a new Supabase project.
+2. Link your local environment: `npx supabase link --project-ref <your-project-ref>`
 
-1. 访问 [Supabase Dashboard](https://supabase.com/dashboard)
-2. 点击 "New Project"
-3. 选择组织，创建新项目
-4. 等待项目创建完成（约1-2分钟）
+## 2. Database Schema
 
-## 2. 获取项目配置
+### Tables
+1.  **`user_usage`**: Tracks user credits.
+    *   `user_id` (uuid, PK, references auth.users)
+    *   `credits` (int, default 100)
+    *   `total_usage` (int)
+    *   `updated_at` (timestamp)
+2.  **`credit_transactions`**: Logs credit history.
+    *   `id` (uuid, PK)
+    *   `user_id` (uuid)
+    *   `amount` (int) - Negative for consumption, positive for grants.
+    *   `description` (text)
+    *   `metadata` (jsonb)
+    *   `created_at` (timestamp)
 
-在项目设置中找到以下信息：
+### Stored Procedures (RPC)
+*   **`deduct_credits`**:
+    *   **Params**: `p_user_id`, `p_amount`, `p_description`, `p_metadata`
+    *   **Logic**: Atomically checks balance, deducts credits, logs transaction, updates timestamp. Returns new balance.
 
-```
-Project URL: https://your-project-id.supabase.co
-API Key: sb_publishable_your_api_key_here
-```
+### Row Level Security (RLS)
+*   **`user_usage`**: Users can view their own usage. Service role can update.
+*   **`credit_transactions`**: Users can view their own history.
 
-## 3. 配置 GitHub OAuth
-
-### 3.1 创建 GitHub OAuth App
-
-1. 访问 [GitHub Settings > Developer settings > OAuth Apps](https://github.com/settings/applications/new)
-2. 填写信息：
-   - **Application name**: CoverView
-   - **Homepage URL**: `https://your-project-id.supabase.co`
-   - **Authorization callback URL**: `https://your-project-id.supabase.co/auth/v1/callback`
-3. 点击 "Register application"
-4. 复制 **Client ID** 和生成 **Client Secret**
-
-### 3.2 在 Supabase 中配置
-
-1. 在 Supabase Dashboard 中：
-   - 导航到 `Authentication` > `Providers`
-   - 找到 GitHub provider
-   - 启用并填入 GitHub 的 Client ID 和 Client Secret
-
-## 4. 设置环境变量
-
-创建 `.env.local` 文件：
-
-```env
-VITE_SUPABASE_URL=https://your-project-id.supabase.co
-VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY=sb_publishable_your_api_key_here
-```
-
-## 5. 运行数据库迁移
-
-1. 在 Supabase Dashboard 中：
-   - 导航到 `SQL Editor`
-   - 粘贴 `supabase/schema.sql` 中的内容
-   - 点击 "Run" 执行
-
-## 6. 测试配置
-
+## 3. Edge Functions
+Deploy the following functions:
 ```bash
-npm install
-npm start
+npx supabase functions deploy generate-image
+npx supabase functions deploy optimize-title
+npx supabase functions deploy proxy-image
 ```
 
-访问应用，点击 "Continue with GitHub" 测试登录功能。
+## 4. Environment Variables & Secrets
 
-## 故障排除
+### Local (`.env.local`)
+```env
+REACT_APP_SUPABASE_URL=https://<project>.supabase.co
+REACT_APP_SUPABASE_ANON_KEY=<your-anon-key>
+```
 
-### GitHub OAuth 重定向错误
-- 确保 GitHub 中的回调 URL 完全匹配 Supabase 项目的 URL
-- 检查 HTTPS 是否正确配置
+### Remote Secrets (Set via Dashboard or CLI)
+For `generate-image` and `optimize-title`:
+*   `OPENROUTER_API_KEY`: Key for OpenRouter (Title Optimization).
+*   `POLLINATIONS_TOKEN`: (Optional) Token for Pollinations AI, though likely not strictly enforced yet.
 
-### 认证状态不更新
-- 清除浏览器缓存和 localStorage
-- 确认环境变量正确设置
-
-### 数据库权限错误
-- 确认 RLS (Row Level Security) 策略正确执行
-- 检查用户 ID 是否正确关联
-
-## 安全注意事项
-
-- **永远不要**在前端暴露 `service_role` 密钥
-- 定期轮换 GitHub OAuth 应用密钥
-- 在生产环境中启用额外的安全策略
+## 5. Auth Setup
+1. Enable Google/GitHub providers in Supabase Dashboard.
+2. Configure Success URL to `http://localhost:3000` (dev) or your production URL.

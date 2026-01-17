@@ -1,0 +1,165 @@
+{
+    "home": {
+        "hero": {
+            "title": "Create Stunning Blog Covers in Seconds",
+            "subtitle": "Elevate your blog with zimage-powered cover images and smart title optimization. Professional and fast.",
+            "getStarted": "Get Started",
+            "star": "Star on Github"
+        },
+        "features": {
+            "title": "Everything you need for perfect covers",
+            "ai": {
+                "title": "zimage Powered",
+                "desc": "Generate unique artistic covers using zimage models."
+            },
+            "optimize": {
+                "title": "Smart Optimization",
+                "desc": "Optimize your blog titles for better engagement with AI."
+            },
+            "icons": {
+                "title": "3000+ Icons",
+                "desc": "Integration with SimpleIcons for all tech brands."
+            },
+            "unsplash": {
+                "title": "Unsplash Search",
+                "desc": "Access millions of high-quality stock photos directly."
+            }
+        },
+        "platforms": "Support platforms like Hashnode or Dev.to",
+        "cta": {
+            "title": "Ready to transform your blog?",
+            "subtitle": "Join thousands of developers creating beautiful content."
+        }
+    },
+    "header": {
+        "star": "Star on Github",
+        "signedInAs": "Signed in as",
+        "profile": "Your Profile",
+        "signOut": "Sign out"
+    },
+    "editor": {
+        "blogTitle": "Blog Title",
+        "author": "Author",
+        "icon": "Icon",
+        "textColor": "Text Color",
+        "iconColor": "Icon Color",
+        "font": "Font",
+        "fontSize": "Font Size",
+        "color": "Background Color",
+        "platform": "Platform",
+        "resetAll": "Reset All",
+        "placeholderTitle": "Enter title here",
+        "placeholderAuthor": "Author name",
+        "themes": "Themes",
+        "styleLabel": "✨ AI Optimize",
+        "styleCost": "Uses 1 Credit",
+        "styleOptions": {
+            "professional": "Professional",
+            "catchy": "Catchy",
+            "simple": "Simple"
+        }
+    },
+    "unsplash": {
+        "title": "🔍 Select Online Image",
+        "searchPlaceholder": "Search photos",
+        "animeTitle": "Random Anime Image",
+        "animeSubtitle": "From Licyuan API (t.alcy.cc)",
+        "getRandom": "Get Random Image",
+        "clickToSelect": "Click to Select"
+    },
+    "suggestions": {
+        "loading": "AI is optimizing title...",
+        "error": "Optimization failed",
+        "errorHint": "Please check your connection and try again",
+        "title": "🤖 AI Optimization",
+        "suggestionsCount": "{{count}} suggestions",
+        "option": "Option",
+        "selected": "Selected",
+        "use": "Use Title",
+        "tip": "💡 Tip: Click any option to use it, or continue editing"
+    },
+    "iconSelector": {
+        "title": "Select Icon",
+        "searchPlaceholder": "Search icons...",
+        "loading": "Loading icons...",
+        "uploadOwn": "Upload Your Own",
+        "showing": "Showing",
+        "total": "Total"
+    },
+    "ai": {
+        "title": "🎨 zimage Generator",
+        "tabs": {
+            "generate": "Generate",
+            "history": "History"
+        },
+        "style": {
+            "label": "Select Style",
+            "options": {
+                "realistic": "Realistic",
+                "artistic": "Artistic",
+                "anime": "Anime",
+                "fantasy": "Fantasy",
+                "cyberpunk": "Cyberpunk",
+                "minimalist": "Minimalist"
+            },
+            "descriptions": {
+                "realistic": "Photo-realistic effect",
+                "artistic": "Artistic painting effect",
+                "anime": "Japanese anime style",
+                "fantasy": "Magical fantasy effect",
+                "cyberpunk": "Futuristic sci-fi style",
+                "minimalist": "Clean modern design"
+            }
+        },
+        "prompt": {
+            "label": "Image Description (Optional)",
+            "placeholder": "Describe the content, e.g. A developer coding in space...",
+            "hint": "We will combine your title, style, and description to generate the best prompt for you."
+        },
+        "actions": {
+            "generate": "🚀 Generate Image",
+            "generateWithCost": "🚀 Generate (1 Credit)",
+            "generating": "Generating...",
+            "use": "Use",
+            "useThis": "✓ Use This Image",
+            "regenerate": "🔄 Regenerate",
+            "regenerateWithCost": "🔄 Regenerate (1 Credit)",
+            "delete": "Delete",
+            "confirmDelete": "Are you sure you want to delete this image?"
+        },
+        "result": {
+            "title": "Generated Result",
+            "prompt": "Prompt:",
+            "url": "URL:"
+        },
+        "history": {
+            "empty": "No generation history yet"
+        },
+        "errors": {
+            "emptyPrompt": "Please enter image description",
+            "quotaExceeded": "AI image generation quota exceeded, please upgrade to Pro",
+            "insufficientQuota": "Insufficient quota, please upgrade to Pro",
+            "generic": "Image generation error"
+        }
+    },
+    "faq": {
+        "title": "Frequently asked questions",
+        "q1": "What is Coverview?",
+        "a1": "Coverview is a tool to create cover images for your blogs quickly and easily.",
+        "q2": "Is Coverview free?",
+        "a2": "Yes! Coverview is absolutely free to use.",
+        "q3": "Can I upload my custom brand logo?",
+        "a3": "Yes. Just search and select <1>custom</1> in icon section and you can upload your own logo to personalize your cover images.",
+        "seeExample": "See <1>example</1>",
+        "q4": "Can I use coverview for non-technical/personal blogs?",
+        "a4": "Yes! Why not? Even though coverview was built with technical blogs in mind, you can still use it for your personal blogs. Check out the stylish theme for more.",
+        "q5": "Why use Coverview?",
+        "a5": "Because it's simple, quick and easy to use. Why spend hours designing when you can create cover images in seconds?",
+        "q6": "Want to support/sponsor the project?",
+        "a6": "If coverview adds value in your life and you wish to support this project, you can <1>sponsor the original author on Github</1>.",
+        "q7": "Credits",
+        "a7": "This project's initial version was developed by <1>rutikwankhade</1>. The current version is developed by <3>z4none/CoverView</3>.",
+        "secretTitle": "Want to know a secret? Click me",
+        "secretMessage": "Blog titles with a minimum of 8 words have 21% better click-through"
+    }
+}

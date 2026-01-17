@@ -45,7 +45,7 @@ const Profile = () => {
         setIsLoading(false);
     };
 
-    if (!user) return <div className="text-center mt-20">请先登录</div>;
+    if (!user) return <div className="text-center mt-20">Please login first</div>;
 
     return (
         <div className="min-h-screen bg-gray-50 font-Nunito">
@@ -54,11 +54,11 @@ const Profile = () => {
                 {/* 概览卡片 */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8 text-center md:text-left md:flex md:items-center md:justify-between animate-fade-in-up">
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-2">👋 欢迎回来, {user.email?.split('@')[0]}</h2>
-                        <p className="text-gray-500">查看您的账户余额和使用记录</p>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-2">👋 Welcome back, {user.email?.split('@')[0]}</h2>
+                        <p className="text-gray-500">Check your account balance and usage history</p>
                     </div>
                     <div className="mt-6 md:mt-0 bg-blue-50 px-6 py-4 rounded-xl border border-blue-100 flex flex-col items-center">
-                        <span className="text-sm text-blue-600 font-semibold uppercase tracking-wider">剩余 Credits</span>
+                        <span className="text-sm text-blue-600 font-semibold uppercase tracking-wider">Remaining Credits</span>
                         <span className="text-4xl font-extrabold text-blue-600 mt-1">{credits}</span>
                     </div>
                 </div>
@@ -66,14 +66,14 @@ const Profile = () => {
                 {/* 交易记录列表 */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-50 flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-gray-800">📊 消费记录</h3>
+                        <h3 className="text-lg font-bold text-gray-800">📊 Transaction History</h3>
                     </div>
 
                     {isLoading && page === 0 ? (
-                        <div className="p-8 text-center text-gray-400">加载中...</div>
+                        <div className="p-8 text-center text-gray-400">Loading...</div>
                     ) : transactions.length === 0 ? (
                         <div className="p-12 text-center text-gray-400">
-                            暂无记录
+                            No records found
                         </div>
                     ) : (
                         <div className="divide-y divide-gray-50">
@@ -89,7 +89,7 @@ const Profile = () => {
                                             )}
                                         </div>
                                         <div>
-                                            <p className="font-semibold text-gray-800">{tx.description || (tx.amount < 0 ? '消费' : '充值')}</p>
+                                            <p className="font-semibold text-gray-800">{tx.description || (tx.amount < 0 ? 'Spend' : 'Top-up')}</p>
                                             <p className="text-xs text-gray-400 mt-1">
                                                 {format(new Date(tx.created_at), 'yyyy-MM-dd HH:mm:ss')}
                                             </p>
@@ -99,7 +99,7 @@ const Profile = () => {
                                         <p className={`font-bold ${tx.amount < 0 ? 'text-gray-800' : 'text-green-600'}`}>
                                             {tx.amount > 0 ? '+' : ''}{tx.amount}
                                         </p>
-                                        <p className="text-xs text-gray-400 mt-1">余额: {tx.balance_after}</p>
+                                        <p className="text-xs text-gray-400 mt-1">Balance: {tx.balance_after}</p>
                                     </div>
                                 </div>
                             ))}
@@ -112,7 +112,7 @@ const Profile = () => {
                                 onClick={() => setPage(p => p + 1)}
                                 className="text-sm text-blue-500 hover:text-blue-600 font-medium px-4 py-2 rounded-full hover:bg-blue-50 transition-colors"
                             >
-                                加载更多记录
+                                Load more transactions
                             </button>
                         </div>
                     )}

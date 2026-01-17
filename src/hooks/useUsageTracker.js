@@ -71,7 +71,7 @@ export const useUsageTracker = () => {
 
     const fieldMap = {
       aiOptimizations: 'ai_optimizations',
-      imageGenerations: 'image_generations', 
+      imageGenerations: 'image_generations',
       colorRecommendations: 'color_recommendations'
     };
 
@@ -80,7 +80,7 @@ export const useUsageTracker = () => {
     const maxValue = FREE_QUOTA[type];
 
     if (currentValue >= maxValue) {
-      alert(`您已达到免费使用限额 (${maxValue} 次/月)。请升级到 Pro 版本继续使用。`);
+      alert(`You have reached the free limit (${maxValue} times/month). Please upgrade to Pro to continue.`);
       return false;
     }
 

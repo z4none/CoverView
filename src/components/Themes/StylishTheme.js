@@ -4,7 +4,7 @@ import UnsplashSearch from '../UnsplashSearch';
 import IconRenderer from '../IconRenderer';
 
 const StylishTheme = ({ config, onOpenAI, onOpenUnsplash, onOpenUpload }) => {
-    const { title, author, font, icon, customIcon, bgColor } = config;
+    const { title, author, font, icon, customIcon, bgColor, iconColor, fontSize, textColor } = config;
     const { unsplashImage, setUnsplashImage } = useContext(ImgContext);
 
 
@@ -20,12 +20,12 @@ const StylishTheme = ({ config, onOpenAI, onOpenUnsplash, onOpenUpload }) => {
 
                     <div className="h-full w-1/2  bg-white rounded-l-xl">
                         <div className={`${font} px-12 justify-center text-left rounded-xl h-full p-4 flex flex-col`}>
-                            <h1 className=" text-4xl font-bold text-gray-800" style={{ color: bgColor }}>{title}</h1>
+                            <h1 className=" font-bold" style={{ color: textColor, fontSize: `${fontSize}px`, lineHeight: '1.2' }}>{title}</h1>
                             <div className="flex items-center mt-10 text-left">
                                 <div className="mr-2 items-center justify-center flex w-12 h-12">
-                                    <IconRenderer icon={icon} customIcon={customIcon} />
+                                    <IconRenderer icon={icon} customIcon={customIcon} iconColor={iconColor} />
                                 </div>
-                                <h2 className="text-xl  font-semibold text-left " style={{ color: bgColor }}>{author}</h2>
+                                <h2 className="text-xl  font-semibold text-left " style={{ color: textColor }}>{author}</h2>
                             </div>
                         </div>
                     </div>
@@ -62,8 +62,8 @@ const StylishTheme = ({ config, onOpenAI, onOpenUnsplash, onOpenUpload }) => {
                             :
                             <div className="flex flex-col p-6 bg-gray-50 items-center justify-center gap-4 min-h-[400px] border-l border-gray-100">
                                 <div className="text-center mb-2">
-                                    <h3 className="text-xl font-semibold text-gray-700 mb-2">选择背景图片</h3>
-                                    <p className="text-gray-500 text-sm">搜索 Unsplash 图库或使用 AI 生成</p>
+                                    <h3 className="text-xl font-semibold text-gray-700 mb-2">Select Background Image</h3>
+                                    <p className="text-gray-500 text-sm">Search Unsplash or use AI generation</p>
                                 </div>
                                 <div className="flex gap-3 flex-wrap justify-center">
                                     <button

@@ -51,6 +51,18 @@ export class ImageHistoryService {
         }
     }
 
+    deleteImage(id) {
+        try {
+            let history = this.getHistory();
+            history = history.filter(item => item.id !== id);
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(history));
+            return history;
+        } catch (e) {
+            console.error('Failed to delete image from history', e);
+            return this.getHistory();
+        }
+    }
+
     clearHistory() {
         localStorage.removeItem(this.STORAGE_KEY);
         return [];

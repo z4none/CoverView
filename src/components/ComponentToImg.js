@@ -73,10 +73,10 @@ const ComponentToImg = (props) => {
 			});
 
 			await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-			alert("已复制到剪切板");
+			alert("Copied to clipboard");
 		} catch (error) {
 			console.error("Copy failed: ", error);
-			alert("复制失败，请重试");
+			alert("Copy failed, please try again");
 		} finally {
 			setCopyLoading(false);
 		}
