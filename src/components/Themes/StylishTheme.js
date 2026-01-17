@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { ImgContext } from '../../utils/ImgContext';
-import UnsplashSearch from '../UnsplashSearch';
 import IconRenderer from '../IconRenderer';
 
 const StylishTheme = ({ config, onOpenAI, onOpenUnsplash, onOpenUpload }) => {

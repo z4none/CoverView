@@ -8,7 +8,7 @@ const UnsplashSearch = ({ largeImgPreview, onImageSelected }) => {
     const [imageList, setImageList] = useState([]);
     const [searchText, setSearchText] = useState('setup');
     const [provider, setProvider] = useState('unsplash');
-    const { unsplashImage, setUnsplashImage } = useContext(ImgContext);
+    const { setUnsplashImage } = useContext(ImgContext);
 
     const getRandomAnimeImage = () => {
         const timestamp = new Date().getTime();

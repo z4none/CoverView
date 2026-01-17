@@ -364,7 +364,7 @@ export const slugsPart4 = {
     "MoneyGram": "moneygram",
     "MongoDB": "mongodb",
     "Mongoose": "mongoose",
-    "Mongoose": "mongoosedotws",
+    "Mongoose (Server)": "mongoosedotws",
     "Monica": "monica",
     "monkey tie": "monkeytie",
     "Monkeytype": "monkeytype",

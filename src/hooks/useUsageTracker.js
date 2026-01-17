@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -19,13 +19,7 @@ export const useUsageTracker = () => {
     colorRecommendations: 20
   };
 
-  useEffect(() => {
-    if (user) {
-      fetchUserUsage();
-    }
-  }, [user]);
-
-  const fetchUserUsage = async () => {
+  const fetchUserUsage = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('user_usage')
@@ -64,7 +58,13 @@ export const useUsageTracker = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserUsage();
+    }
+  }, [user, fetchUserUsage]);
 
   const incrementUsage = async (type) => {
     if (!user) return false;

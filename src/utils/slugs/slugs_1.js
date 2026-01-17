@@ -286,7 +286,7 @@ export const slugsPart1 = {
     "Backbone.js": "backbonedotjs",
     "Backendless": "backendless",
     "Backstage": "backstage",
-    "Backstage": "backstage_casting",
+    "Backstage (Casting)": "backstage_casting",
     "Badoo": "badoo",
     "Baidu": "baidu",
     "Bakaláři": "bakalari",
