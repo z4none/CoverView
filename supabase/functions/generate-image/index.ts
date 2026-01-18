@@ -21,20 +21,35 @@ serve(async (req) => {
     try {
         // 1. 验证用户身份
         const authHeader = req.headers.get('Authorization')
+        console.log(`[Debug] Auth Header present: ${!!authHeader}, Length: ${authHeader?.length}`);
+
         if (!authHeader) {
             throw new Error('Missing Authorization header')
         }
 
+        const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
+        const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
+
+        console.log(`[Debug] Supabase URL: ${supabaseUrl.substring(0, 10)}...`);
+        console.log(`[Debug] Anon Key: ${supabaseAnonKey.substring(0, 5)}...`);
+
         const supabaseClient = createClient(
-            Deno.env.get('SUPABASE_URL') ?? '',
-            Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+            supabaseUrl,
+            supabaseAnonKey,
             { global: { headers: { Authorization: authHeader } } }
         )
 
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser()
 
+        if (authError) {
+            console.error('[Debug] Auth Error Details:', JSON.stringify(authError));
+        }
+        if (user) {
+            console.log(`[Debug] User authenticated: ${user.id}`);
+        }
+
         if (authError || !user) {
-            throw new Error('Unauthorized')
+            throw new Error(`Unauthorized: ${authError?.message || 'No user found'}`)
         }
 
         // 2. 初始化 Admin 客户端（用于安全的数据库操作）

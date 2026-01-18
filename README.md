@@ -6,7 +6,7 @@ Creating cover images for your blogs is now super easy.
 
 ## ✨ 主要改进 (vs 原版)
 
-本项目 fork from [cover-img](https://github.com/rutikwankhade/CoverView)，在原版基础进行了深度的二次开发和增强，主要包含：
+本项目 fork from [rutikwankhade/CoverView](https://github.com/rutikwankhade/CoverView)，在原版基础进行了深度的二次开发和增强，主要包含：
 
 1.  **🤖 AI 深度集成**
     *   **智能优化**: 集成 OpenRouter (Gemini 等)，支持一键优化封面标题。
@@ -65,7 +65,7 @@ npm start
 - 🌠 100+ 开发图标，支持自定义上传
 - 💾 基于博客平台的封面尺寸（Hashnode、Dev）
 - 🔐 用户登录和使用量限制
-- 🤖 AI 功能（开发中）
+- 🤖 AI 功能
 
 ## 🛠️ 技术栈
 
