@@ -256,7 +256,9 @@ const AIImageGenerator = ({
                 </div>
               </div>
               <div className="p-2 text-xs text-gray-600 flex-1 flex flex-col justify-between">
-                <p className="line-clamp-2 mb-1" title={item.prompt}>{item.prompt}</p>
+                <p className="line-clamp-2 mb-1" title={String(item.prompt)}>
+                  {typeof item.prompt === 'object' ? JSON.stringify(item.prompt) : item.prompt}
+                </p>
                 <div className="flex justify-between items-center text-gray-400 text-[10px]">
                   <span>{new Date(item.timestamp).toLocaleDateString()}</span>
                   <span>{t(`ai.style.options.${item.style}`) || item.style}</span>

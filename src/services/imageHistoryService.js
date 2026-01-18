@@ -7,7 +7,25 @@ export class ImageHistoryService {
     getHistory() {
         try {
             const history = localStorage.getItem(this.STORAGE_KEY);
-            return history ? JSON.parse(history) : [];
+            if (!history) return [];
+
+            let parsedHistory = JSON.parse(history);
+            if (!Array.isArray(parsedHistory)) return [];
+
+            // Data sanitization/migration
+            parsedHistory = parsedHistory.map(item => {
+                // Fix for bug where prompt was an object
+                if (typeof item.prompt === 'object' && item.prompt !== null) {
+                    item.prompt = item.prompt.prompt || 'Generated Image';
+                }
+                // Ensure prompt is a string
+                if (typeof item.prompt !== 'string') {
+                    item.prompt = String(item.prompt || '');
+                }
+                return item;
+            });
+
+            return parsedHistory;
         } catch (e) {
             console.error('Failed to load history', e);
             return [];
