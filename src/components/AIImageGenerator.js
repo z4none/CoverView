@@ -85,7 +85,7 @@ const AIImageGenerator = ({
     setError(null);
 
     try {
-      const result = await aiService.generateImage({ title, prompt, style });
+      const result = await aiService.generateImage(prompt, style);
       setGeneratedImage(result);
 
       // Save to history
@@ -168,7 +168,7 @@ const AIImageGenerator = ({
             {t('ai.actions.generating')}
           </span>
         ) : (
-          t('ai.actions.generateWithCost')
+          `${t('ai.actions.generate')} (10 Credits)`
         )}
       </button>
 

@@ -117,12 +117,12 @@
         },
         "actions": {
             "generate": "🚀 生成图片",
-            "generateWithCost": "🚀 生成 (消耗 1 点数)",
+            "generateWithCost": "🚀 生成 (消耗 10 点数)",
             "generating": "生成中...",
             "use": "使用",
             "useThis": "✓ 使用此图",
             "regenerate": "🔄 重新生成",
-            "regenerateWithCost": "🔄 重新生成 (消耗 1 点数)",
+            "regenerateWithCost": "🔄 重新生成 (消耗 10 点数)",
             "delete": "删除",
             "confirmDelete": "确定要删除这张图片吗？"
         },

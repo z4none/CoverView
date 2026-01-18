@@ -87,7 +87,7 @@ class AIService {
         style: style,
         model: 'flux', // Default from edge function
         provider: 'CoverView AI',
-        cost: 1
+        cost: 10
       };
     } catch (error) {
       console.error('Image generation error:', error);

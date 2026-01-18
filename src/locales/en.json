@@ -118,12 +118,12 @@
         },
         "actions": {
             "generate": "🚀 Generate Image",
-            "generateWithCost": "🚀 Generate (1 Credit)",
+            "generateWithCost": "🚀 Generate (10 Credits)",
             "generating": "Generating...",
             "use": "Use",
             "useThis": "✓ Use This Image",
             "regenerate": "🔄 Regenerate",
-            "regenerateWithCost": "🔄 Regenerate (1 Credit)",
+            "regenerateWithCost": "🔄 Regenerate (10 Credits)",
             "delete": "Delete",
             "confirmDelete": "Are you sure you want to delete this image?"
         },
