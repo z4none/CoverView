@@ -8,20 +8,44 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..");
 
-// Load environment files for local runs.
-const envCandidates = [".env.local", ".env"];
-for (const envFile of envCandidates) {
-  const envPath = path.join(projectRoot, envFile);
-  if (fs.existsSync(envPath)) {
-    dotenv.config({ path: envPath, override: false });
+function loadEnvFile(filePath) {
+  if (!fs.existsSync(filePath)) return;
+
+  const raw = fs.readFileSync(filePath, "utf8");
+  const lines = raw.split(/\r?\n/);
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
+    const idx = trimmed.indexOf("=");
+    if (idx <= 0) continue;
+
+    const key = trimmed.slice(0, idx).trim();
+    let value = trimmed.slice(idx + 1).trim();
+
+    // Remove optional surrounding quotes.
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+
+    if (!(key in process.env)) {
+      process.env[key] = value;
+    }
   }
 }
+
+// Load environment files for local runs.
+loadEnvFile(path.join(projectRoot, ".env.local"));
+loadEnvFile(path.join(projectRoot, ".env"));
 
 const SUPABASE_URL =
   process.env.SUPABASE_URL ??
